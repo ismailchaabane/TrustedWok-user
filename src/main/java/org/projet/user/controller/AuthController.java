@@ -1,8 +1,10 @@
 package org.projet.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.projet.user.entity.PasswordResetToken;
 import org.projet.user.entity.User;
+import org.projet.user.enums.UserRole;
 import org.projet.user.repository.PasswordResetTokenRepository;
 import org.projet.user.repository.UserRepository;
 import org.projet.user.dto.AuthResponse;
@@ -10,6 +12,7 @@ import org.projet.user.dto.LoginRequest;
 import org.projet.user.dto.RegisterRequest;
 import org.projet.user.dto.UpdateProfileRequest;
 import org.projet.user.security.JwtUtil;
+import org.projet.user.service.RecaptchaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,25 +38,30 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final SecureRandom random = new SecureRandom();
+    private final RecaptchaService recaptchaService;
     private static final String RESPONSE_ERROR = "error";
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest req) {
+        recaptchaService.validateToken(req.getRecaptchaToken(), "register");
         if (userRepository.findByEmail(req.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body(Map.of(RESPONSE_ERROR, "Email already in use"));
         }
         User user = new User();
-        user.setName(req.getName());
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
         user.setEmail(req.getEmail());
+        user.setPhoneNumber(req.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
-        user.setRole(User.Role.USER);
+        user.setRole(UserRole.CLIENT);
         User saved = userRepository.save(user);
         saved.setPassword(null);
         return ResponseEntity.ok(saved);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest request) {
+        recaptchaService.validateToken(request.getRecaptchaToken(), "login");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
@@ -120,7 +128,8 @@ public class AuthController {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) return ResponseEntity.notFound().build();
 
-        if (req.getName() != null && !req.getName().isBlank()) user.setName(req.getName().trim());
+        if (req.getFirstName() != null && !req.getFirstName().isBlank()) user.setFirstName(req.getFirstName().trim());
+        if (req.getLastName() != null && !req.getLastName().isBlank()) user.setLastName(req.getLastName().trim());
         if (req.getEmail() != null && !req.getEmail().isBlank()) {
             if (!req.getEmail().equals(email) && userRepository.findByEmail(req.getEmail()).isPresent()) {
                 return ResponseEntity.badRequest().body(Map.of(RESPONSE_ERROR, "Email already in use"));

@@ -9,6 +9,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,51 +31,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService); // ✅ Fix
-        // Use constructor that accepts UserDetailsService in Spring Security 7
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/auth/login",
-                                "/auth/register",
-                                "/auth/forgot-password",
-                                "/auth/reset-password",
-                                "/h2-console/**"
-                        ).permitAll()
-                        .requestMatchers("/auth/**").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-
-        http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
-    public SecurityFilterChain filterChain(HttpSecurity http)  {
-        http
-            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {}) // Enable CORS (configured in CorsConfig)
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/h2-console/**").permitAll()
-                .requestMatchers("/auth/**").authenticated()
-                .anyRequest().authenticated()
+                    .requestMatchers(
+                            "/api/auth/**",
+                            "/auth/login",
+                            "/auth/register",
+                            "/auth/forgot-password",
+                            "/auth/reset-password",
+                            "/h2-console/**"
+                    ).permitAll()
+                    .requestMatchers("/auth/**").authenticated()
+                    .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -81,9 +65,8 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         // allow frames for h2 console
-        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         return http.build();
     }
-}
 }

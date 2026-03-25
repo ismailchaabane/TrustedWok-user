@@ -13,9 +13,9 @@ public class UserResponseDTO {
 
     private Long id;
     private String email;
-    private String nom;
-    private String prenom;
-    private String telephone;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private UserRole role;
     private KycStatus kycStatus;
     private Boolean isActive;
@@ -26,9 +26,9 @@ public class UserResponseDTO {
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .nom(user.getNom())
-                .prenom(user.getPrenom())
-                .telephone(user.getTelephone())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .phoneNumber(user.getPhoneNumber())
                 .kycStatus(user.getKycStatus())
                 .isActive(user.getIsActive())
                 .createdAt(user.getCreatedAt())

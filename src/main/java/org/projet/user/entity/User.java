@@ -1,19 +1,15 @@
 package org.projet.user.entity;
 
 import org.projet.user.enums.KycStatus;
-import org.projet.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.projet.user.enums.UserRole;
+
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,35 +27,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "users")
+@Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String lastName;
+    private String firstName;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
+    private String phoneNumber;
 
-    // ✅ "name" pour compatibilité avec AuthController
-    private String name;
-
-    private String nom;
-    private String prenom;
-    private String telephone;
-
-    // ✅ Enum interne Role pour AuthController
-    public enum Role {
-        USER, ADMIN, CLIENT, FREELANCER
-    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.USER;
+    private UserRole role = UserRole.CLIENT;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -73,15 +61,5 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-}
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    public enum Role {
-        USER, ADMIN
-    }
 }

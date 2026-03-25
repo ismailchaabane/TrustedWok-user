@@ -1,5 +1,6 @@
 package org.projet.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String email;
     private String password;
-    private String recaptchaToken; // optional
+    @NotBlank(message = "reCAPTCHA token is required")
+    private String recaptchaToken;
 }

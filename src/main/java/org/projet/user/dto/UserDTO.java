@@ -7,21 +7,22 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserDTO {
 
-    @NotBlank(message = "Email obligatoire")
-    @Email(message = "Format email invalide")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Mot de passe obligatoire")
+    @NotBlank(message = "Password is required")
     private String password;
 
-    private String nom;
-    private String prenom;
-    private String telephone;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
-    @NotNull(message = "Rôle obligatoire")
+    @NotNull(message = "Role is required")
     private UserRole role;
 }

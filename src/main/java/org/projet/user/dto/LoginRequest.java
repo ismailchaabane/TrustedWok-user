@@ -1,5 +1,6 @@
 package org.projet.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
     private String email;
     private String password;
-    private String recaptchaToken; // optional, validated if present
+    @NotBlank(message = "reCAPTCHA token is required")
+    private String recaptchaToken;
 }
