@@ -1,0 +1,12 @@
+<div class="toast-container" aria-live="polite">
+  <div
+    *ngFor="let t of toasts"
+    class="toast toast-{{ t.type }}"
+    [attr.role]="t.type === 'error' ? 'alert' : 'status'"
+    (click)="remove(t.id)"
+  >
+    <span class="toast-icon" [attr.aria-hidden]="true"></span>
+    <span class="toast-message">{{ t.message }}</span>
+    <button type="button" class="toast-dismiss" (click)="remove(t.id); $event.stopPropagation()" aria-label="Dismiss">×</button>
+  </div>
+</div>

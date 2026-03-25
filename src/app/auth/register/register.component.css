@@ -1,0 +1,115 @@
+.password-strength {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.strength-bar {
+  display: flex;
+  gap: 3px;
+}
+
+.strength-bar .fill {
+  width: 1.25rem;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--auth-border);
+  transition: background 0.2s;
+}
+
+.strength-bar .fill.on.s1 { background: var(--auth-error); }
+.strength-bar .fill.on.s2 { background: var(--auth-accent-dim); }
+.strength-bar .fill.on.s3 { background: var(--auth-accent); }
+.strength-bar .fill.on.s4 { background: var(--accent-hover); }
+
+.strength-label {
+  font-size: 0.75rem;
+  color: var(--auth-text-muted);
+}
+
+.password-requirements {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--auth-text-muted);
+  line-height: 1.6;
+}
+
+.password-requirements li {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.password-requirements li.met {
+  opacity: 1;
+  color: var(--auth-accent);
+}
+
+
+.register-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.register-actions--split {
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.register-actions button {
+  min-height: 44px;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.register-actions .btn-primary {
+  width: 100%;
+  border: none;
+  color: var(--bg);
+  background: var(--auth-accent);
+}
+
+.register-actions .btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px -8px var(--auth-focus-ring);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--auth-text);
+  border: 1px solid var(--auth-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--auth-surface);
+}
+
+.register-actions--split .btn-secondary,
+.register-actions--split .btn-primary {
+  width: calc(50% - 0.375rem);
+}
+
+.register-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .register-actions--split {
+    flex-direction: column;
+  }
+
+  .register-actions--split .btn-secondary,
+  .register-actions--split .btn-primary {
+    width: 100%;
+  }
+}

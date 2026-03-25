@@ -1,0 +1,32 @@
+<div class="profile-page">
+  <h2>Profile</h2>
+  <p class="profile-subtitle">Update your details, email or password.</p>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="field">
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" formControlName="firstName" placeholder="Your first name" />
+      <span class="error" *ngIf="form.get('firstName')?.touched && form.get('firstName')?.errors?.['required']">Required</span>
+      <span class="error" *ngIf="form.get('firstName')?.touched && form.get('firstName')?.errors?.['minlength']">At least 2 characters</span>
+    </div>
+    <div class="field">
+      <label for="lastName">Last name</label>
+      <input id="lastName" type="text" formControlName="lastName" placeholder="Your last name" />
+      <span class="error" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.errors?.['required']">Required</span>
+      <span class="error" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.errors?.['minlength']">At least 2 characters</span>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+      <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['required']">Required</span>
+      <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['email']">Valid email required</span>
+    </div>
+    <div class="field">
+      <label for="newPassword">New password (leave blank to keep)</label>
+      <input id="newPassword" type="password" formControlName="newPassword" placeholder="••••••••" autocomplete="new-password" />
+      <span class="error" *ngIf="form.get('newPassword')?.touched && form.get('newPassword')?.value && form.get('newPassword')?.errors?.['minlength']">At least 8 characters</span>
+      <span class="error" *ngIf="form.get('newPassword')?.touched && form.get('newPassword')?.value && (form.get('newPassword')?.errors?.['passwordLower'] || form.get('newPassword')?.errors?.['passwordUpper'] || form.get('newPassword')?.errors?.['passwordDigit'] || form.get('newPassword')?.errors?.['passwordSpecial'])">Use upper, lower, number and special character</span>
+    </div>
+    <button type="submit" class="btn-save" [disabled]="saving">{{ saving ? 'Saving…' : 'Save changes' }}</button>
+  </form>
+  <p *ngIf="loading" class="loading-msg">Loading profile…</p>
+</div>

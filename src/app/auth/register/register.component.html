@@ -1,0 +1,97 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <span class="auth-badge">Get started</span>
+    <h1>Create account</h1>
+    <p class="subtitle" *ngIf="phase === 1">Step 1 of 2: tell us who you are</p>
+    <p class="subtitle" *ngIf="phase === 2">Step 2 of 2: secure your account</p>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field" *ngIf="phase === 1">
+        <label for="firstName">First name</label>
+        <input id="firstName" type="text" formControlName="firstName" placeholder="Your first name" autocomplete="given-name" />
+        <span class="error" *ngIf="form.get('firstName')?.touched && form.get('firstName')?.errors?.['required']">
+          First name is required
+        </span>
+        <span class="error" *ngIf="form.get('firstName')?.touched && form.get('firstName')?.errors?.['minlength']">
+          At least 2 characters
+        </span>
+      </div>
+      <div class="field" *ngIf="phase === 1">
+        <label for="lastName">Last name</label>
+        <input id="lastName" type="text" formControlName="lastName" placeholder="Your last name" autocomplete="family-name" />
+        <span class="error" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.errors?.['required']">
+          Last name is required
+        </span>
+        <span class="error" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.errors?.['minlength']">
+          At least 2 characters
+        </span>
+      </div>
+      <div class="field" *ngIf="phase === 1">
+        <label for="phoneNumber">Phone number</label>
+        <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="+216 12 345 678" autocomplete="tel" />
+        <span class="error" *ngIf="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.errors?.['required']">
+          Phone number is required
+        </span>
+        <span class="error" *ngIf="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.errors?.['pattern']">
+          Enter a valid phone number
+        </span>
+      </div>
+      <div class="field" *ngIf="phase === 2">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['required']">
+          Email is required
+        </span>
+        <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['email']">
+          Enter a valid email
+        </span>
+      </div>
+      <div class="field" *ngIf="phase === 2">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••" autocomplete="new-password" />
+        <div class="password-strength" *ngIf="form.get('password')?.value">
+          <div class="strength-bar">
+            <span class="fill s1" [class.on]="strength >= 1"></span>
+            <span class="fill s2" [class.on]="strength >= 2"></span>
+            <span class="fill s3" [class.on]="strength >= 3"></span>
+            <span class="fill s4" [class.on]="strength >= 4"></span>
+          </div>
+          <span class="strength-label">{{ strength === 0 ? 'Too weak' : strength === 1 ? 'Weak' : strength === 2 ? 'Fair' : strength === 3 ? 'Good' : 'Strong' }}</span>
+        </div>
+        <ul class="password-requirements">
+          <li [class.met]="(form.get('password')?.value?.length || 0) >= 8">At least 8 characters</li>
+          <li [class.met]="hasLower">One lowercase letter</li>
+          <li [class.met]="hasUpper">One uppercase letter</li>
+          <li [class.met]="hasDigit">One number</li>
+          <li [class.met]="hasSpecial">One special character</li>
+        </ul>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['required']">
+          Password is required
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['minlength']">
+          At least 8 characters
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['passwordLower']">
+          Add a lowercase letter
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['passwordUpper']">
+          Add an uppercase letter
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['passwordDigit']">
+          Add a number
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['passwordSpecial']">
+          Add a special character
+        </span>
+      </div>
+      <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <div class="register-actions" *ngIf="phase === 1">
+        <button type="button" class="btn-primary" (click)="goToPhase2()">Continue</button>
+      </div>
+      <div class="register-actions register-actions--split" *ngIf="phase === 2">
+        <button type="button" class="btn-secondary" (click)="backToPhase1()" [disabled]="loading">Back</button>
+        <button type="submit" class="btn-primary" [disabled]="loading">{{ loading ? 'Creating account…' : 'Create account' }}</button>
+      </div>
+    </form>
+    <p class="footer">Already have an account? <a routerLink="/auth/login">Sign in</a></p>
+  </div>
+</div>

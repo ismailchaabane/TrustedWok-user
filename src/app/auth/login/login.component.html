@@ -1,0 +1,44 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <span class="auth-badge">Sign in</span>
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to your account to continue</p>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['required']">
+          Email is required
+        </span>
+        <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['email']">
+          Enter a valid email
+        </span>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••" autocomplete="current-password" />
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['required']">
+          Password is required
+        </span>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.['minlength']">
+          At least 4 characters
+        </span>
+        <a class="forgot-link" routerLink="/auth/forgot-password">Forgot password?</a>
+      </div>
+      <div class="field field-checkbox">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="rememberMe" />
+          <span>Remember me</span>
+        </label>
+      </div>
+      <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="warning-msg" *ngIf="failedAttempts >= 3 && failedAttempts < 5">
+        Multiple failed attempts detected. Please try again.
+      </p>
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+    <p class="footer">Don't have an account? <a routerLink="/auth/register">Create one</a></p>
+  </div>
+</div>

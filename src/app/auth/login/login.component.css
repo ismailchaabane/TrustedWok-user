@@ -1,0 +1,48 @@
+/* Login-specific (main styles in global styles.css under .auth-page) */
+.forgot-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--auth-accent, var(--accent));
+}
+
+.field-checkbox {
+  margin-bottom: 0.75rem;
+}
+
+.auth-page .field.field-checkbox .checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--auth-text-muted, var(--text-muted));
+  margin-bottom: 0;
+}
+
+.auth-page .field.field-checkbox .checkbox-label input {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  padding: 0;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  flex-shrink: 0;
+  accent-color: var(--auth-accent, var(--accent));
+}
+
+.auth-page .field.field-checkbox .checkbox-label span {
+  line-height: 1;
+}
+
+.warning-msg {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 10px;
+  color: #fbbf24;
+  font-size: 0.8125rem;
+}
+

@@ -1,0 +1,22 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <div class="dashboard-user" *ngIf="user$">
+      <span class="dashboard-user-info">{{ user$.email }} <em class="role">({{ user$.role }})</em></span>
+      <a class="btn-profile" routerLink="/dashboard/profile">Profile</a>
+      <button type="button" class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </header>
+  <nav class="dashboard-nav" *ngIf="user$">
+    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/dashboard/profile" routerLinkActive="active">Profile</a>
+    <span class="admin-badge" *ngIf="user$.role === 'ADMIN'">Admin</span>
+  </nav>
+  <main class="dashboard-main">
+    <p class="dashboard-welcome">You are logged in. This area is protected by AuthGuard.</p>
+    <section class="admin-section" *ngIf="user$?.role === 'ADMIN'">
+      <h3>Admin</h3>
+      <p class="dashboard-welcome">You have administrator access. Role-based routes and content can be added here.</p>
+    </section>
+  </main>
+</div>
